@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { searchPosts } from "../services/api";
 
-export const Search = ({ setSearchParams, setApiData, setIsLoading }: any) => {
-  const [query, setQuery] = useState<string>('');
+export const Search = ({
+  setApiData,
+  setApiResponsePages,
+  setIsLoading,
+  setIsOrderedByRelevance,
+  setPage,
+  setSearchParams,
+}: any) => {
+  const [query, setQuery] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -18,9 +25,14 @@ export const Search = ({ setSearchParams, setApiData, setIsLoading }: any) => {
 
     try {
       setIsLoading(true);
+      setApiData(null);
+      setIsOrderedByRelevance(false);
+      setPage(1);
+      setApiResponsePages(1);
 
-      searchPosts(query).then((res) => {
+      searchPosts(query, 1).then((res) => {
         setApiData(res);
+        setApiResponsePages(res.pages);
         setIsLoading(false);
       });
       return;
@@ -30,11 +42,9 @@ export const Search = ({ setSearchParams, setApiData, setIsLoading }: any) => {
   };
 
   return (
-    <>
-      <div className="text-center justify-center m-20 p-8">
-        <input placeholder="digite aqui..." onChange={handleChange} type="text" />
-        <button onClick={handleSearch}>GET</button>
-      </div>
-    </>
+    <div className="text-center justify-center m-10 p-8">
+      <input placeholder="digite aqui..." onChange={handleChange} type="text" />
+      <button onClick={handleSearch}>GET</button>
+    </div>
   );
 };

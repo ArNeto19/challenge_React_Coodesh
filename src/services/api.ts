@@ -17,9 +17,15 @@ export interface IPostData {
   link: string;
 }
 
-export const searchPosts = async (query: string) => {
+export const searchPosts = async (query: string, page?: number, orderType?: string) => {
   try {
-    const response = await api.get(`/posts?search=${query}`);
+    if (orderType !== undefined) {
+      const response = await api.get(`/posts?search=${query}&page=${page}&orderby=${orderType}`);
+
+      return response.data;
+    }
+
+    const response = await api.get(`/posts?search=${query}&page=${page}`);
 
     return response.data;
   } catch (err) {
