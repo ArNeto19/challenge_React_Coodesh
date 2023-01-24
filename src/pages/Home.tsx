@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { NavBar } from "../components/NavBar";
 import { Search } from "../components/Search";
 import { searchPosts, IApiData, IPostData } from "../services/api";
 
 export const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const [apiData, setApiData] = useState<IApiData | null>();
   const [posts, setPosts] = useState<IPostData[] | null>();
   const [isOrderedByRelevance, setIsOrderedByRelevance] = useState(false);
@@ -82,6 +84,7 @@ export const Home = () => {
 
   return (
     <>
+      <NavBar />
       <div className="text-center m-10 text-5xl font-bold ">
         <h1>Search for health articles</h1>
       </div>
@@ -110,7 +113,7 @@ export const Home = () => {
                 posts.map((post) => {
                   return (
                     <li key={post.id}>
-                      <a href={post.link}>{post.title}</a>
+                      <a href={`/article/${post.id}`}>{post.title}</a>
                     </li>
                   );
                 })}

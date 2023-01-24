@@ -17,6 +17,32 @@ export interface IPostData {
   link: string;
 }
 
+export interface IArticleData {
+  title: string;
+  headline: string;
+  content: string;
+  author: {
+    id: number;
+    name: string;
+    link: string;
+    description: string;
+  };
+  bibliography: string;
+  published: string;
+  categories: [
+    {
+      id: number;
+      slug: string;
+    }
+  ];
+  tags: [
+    {
+      id: number;
+      slug: string;
+    }
+  ];
+}
+
 export const searchPosts = async (query: string, page?: number, orderType?: string) => {
   try {
     if (orderType !== undefined) {
@@ -30,5 +56,15 @@ export const searchPosts = async (query: string, page?: number, orderType?: stri
     return response.data;
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const getArticle = async (postId?: string) => {
+  try {
+    const response = await api.get(`/posts/${postId}`);
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 };

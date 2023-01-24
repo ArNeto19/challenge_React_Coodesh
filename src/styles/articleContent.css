@@ -1,0 +1,14 @@
+h1 {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+a:hover {
+  color: blue;
+  text-decoration: underline;
+}
+
+figure {
+  width: 30rem;
+  margin: auto;
+}
