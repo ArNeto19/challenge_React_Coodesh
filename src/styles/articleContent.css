@@ -1,6 +1,29 @@
 h1 {
   font-size: x-large;
+  font-weight: bolder;
+}
+
+h2 {
+  font-size: larger;
   font-weight: bold;
+}
+
+h3 {
+  font-size: large;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: large;
+  font-weight: 500;
+}
+
+p {
+  text-align: justify;
+}
+
+a {
+  color: #d4649a;
 }
 
 a:hover {
@@ -11,4 +34,21 @@ a:hover {
 figure {
   width: 30rem;
   margin: auto;
+}
+
+strong {
+  font-weight: 500;
+}
+
+.read-too {
+  width: 35rem;
+  margin: 10px auto;
+  border-style: dashed;
+  border-color: rgba(65, 159, 185, 0.75);
+  border-width: 1px;
+  border-radius: 10px;
+}
+
+.read-too p {
+  text-align: center;
 }

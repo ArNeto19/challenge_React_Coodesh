@@ -27,16 +27,23 @@ export const Article = () => {
           <p>Loading content...</p>
         </div>
       ) : (
-        <ArticleContent
-          title={articleData.title}
-          headline={articleData.headline}
-          content={articleData.content}
-          author={articleData.author}
-          bibliography={articleData.bibliography}
-          published={articleData.published}
-          categories={articleData.categories}
-          tags={articleData.tags}
-        />
+        <div className="flex">
+          <ArticleContent
+            title={articleData.title}
+            headline={articleData.headline}
+            content={articleData.content}
+            author={articleData.author}
+            bibliography={articleData.bibliography}
+            published={articleData.published}
+            categories={articleData.categories}
+            tags={articleData.tags}
+          />
+          <div>
+            <h1>
+              {articleData.author.name}
+            </h1>
+          </div>
+        </div>
       )}
     </>
   );

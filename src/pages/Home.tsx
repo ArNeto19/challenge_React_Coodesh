@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { AppPagination } from "../components/AppPagination";
 import { NavBar } from "../components/NavBar";
+import { OrderByRelevance } from "../components/OrderByRelevance";
 import { Search } from "../components/Search";
-import { searchPosts, IApiData, IPostData } from "../services/api";
+import { IApiData, IPostData } from "../services/api";
 
 export const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
   const [apiData, setApiData] = useState<IApiData | null>();
   const [posts, setPosts] = useState<IPostData[] | null>();
   const [isOrderedByRelevance, setIsOrderedByRelevance] = useState(false);
@@ -17,70 +18,6 @@ export const Home = () => {
   useEffect(() => {
     setPosts(apiData?.data);
   }, [apiData, isLoading]);
-
-  const updateResponseWithPagedRequest = (newPageNumber: number) => {
-    setPage(newPageNumber);
-
-    try {
-      setIsLoading(true);
-
-      if (isOrderedByRelevance) {
-        searchPosts(`${searchParams.get("search")}`, newPageNumber, "relevance").then((res) => {
-          setApiData(res);
-          setIsLoading(false);
-        });
-        return;
-      }
-
-      searchPosts(`${searchParams.get("search")}`, newPageNumber).then((res) => {
-        setApiData(res);
-        setIsLoading(false);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleNextPage = () => {
-    const newPage = page >= apiResponsePages ? 1 : page + 1;
-    updateResponseWithPagedRequest(newPage);
-  };
-
-  const handlePreviousPage = () => {
-    const newPage = page <= 1 ? apiResponsePages : page - 1;
-    updateResponseWithPagedRequest(newPage);
-  };
-
-  const orderByRelevance = () => {
-    if (!isOrderedByRelevance) {
-      try {
-        setIsLoading(true);
-        setPosts(null);
-        setIsOrderedByRelevance(true);
-
-        searchPosts(`${searchParams.get("search")}`, page, "relevance").then((res) => {
-          setApiData(res);
-          setIsLoading(false);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setPosts(null);
-      setIsOrderedByRelevance(false);
-
-      searchPosts(`${searchParams.get("search")}`, page).then((res) => {
-        setApiData(res);
-        setIsLoading(false);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
@@ -103,11 +40,18 @@ export const Home = () => {
         {apiData && <p>Foram encontrados: {apiData.size} artigos</p>}
 
         {posts && (
-          <div>
-            <div className="flex justify-center space-x-2 my-3" onClick={orderByRelevance}>
-              <button>Ordenar por relevância</button>
-              <input type="checkbox" checked={isOrderedByRelevance} />
-            </div>
+          <>
+            <OrderByRelevance
+              apiResponsePages={apiResponsePages}
+              isOrderedByRelevance={isOrderedByRelevance}
+              page={page}
+              searchParams={searchParams}
+              setApiData={setApiData}
+              setIsLoading={setIsLoading}
+              setIsOrderedByRelevance={setIsOrderedByRelevance}
+              setPosts={setPosts}
+              setPage={setPage}
+            />
             <div className="text-start">
               {posts &&
                 posts.map((post) => {
@@ -118,12 +62,16 @@ export const Home = () => {
                   );
                 })}
             </div>
-            <div className="flex justify-center space-x-2 mt-3">
-              <button onClick={handlePreviousPage}>{"<"}</button>
-              <p>{page}</p>
-              <button onClick={handleNextPage}>{">"}</button>
-            </div>
-          </div>
+            <AppPagination
+              apiResponsePages={apiResponsePages}
+              isOrderedByRelevance={isOrderedByRelevance}
+              page={page}
+              searchParams={searchParams}
+              setApiData={setApiData}
+              setIsLoading={setIsLoading}
+              setPage={setPage}
+            />
+          </>
         )}
       </div>
     </>
