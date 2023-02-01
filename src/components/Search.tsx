@@ -15,7 +15,7 @@ export const Search = ({
 
   const handleSearch = () => {
     if (!keyword?.trim()) {
-      setSearchParams(undefined);
+      window.location.reload()
       return;
     }
 
