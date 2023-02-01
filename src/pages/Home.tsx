@@ -1,58 +1,78 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AppPagination } from "../components/AppPagination";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 import { NavBar } from "../components/NavBar";
 import { OrderByRelevance } from "../components/OrderByRelevance";
 import { Search } from "../components/Search";
-import { IApiData, IPostData } from "../services/api";
+import { IApiData, IPostData, searchPosts } from "../services/api";
 
 export const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [apiData, setApiData] = useState<IApiData | null>();
   const [posts, setPosts] = useState<IPostData[] | null>();
-  const [isOrderedByRelevance, setIsOrderedByRelevance] = useState(false);
+  const [query, setQuery] = useState<string>();
   const [page, setPage] = useState(1);
-  const [apiResponsePages, setApiResponsePages] = useState(1);
+  const [isOrderedByRelevance, setIsOrderedByRelevance] = useState(true);
+  const [apiResponsePages, setApiResponsePages] = useState<number | undefined>(1);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setPosts(apiData?.data);
-  }, [apiData, isLoading]);
+    if (apiData) {
+      setPosts(apiData?.data);
+      setApiResponsePages(apiData?.pages);
+      return;
+    }
+
+    if (query) {
+      try {
+        setIsLoading(true);
+
+        searchPosts(query, page, isOrderedByRelevance ? "relevance" : undefined).then((res) => {
+          setApiData(res);
+          setIsLoading(false);
+        });
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+
+      return;
+    }
+
+    setSearchParams(undefined);
+  }, [apiData, query, page, isOrderedByRelevance, setSearchParams]);
 
   return (
     <>
       <NavBar />
-      <div className="text-center m-10 text-5xl font-bold ">
-        <h1>Search for health articles</h1>
-      </div>
-      <Search
-        setApiData={setApiData}
-        setApiResponsePages={setApiResponsePages}
-        setIsLoading={setIsLoading}
-        setIsOrderedByRelevance={setIsOrderedByRelevance}
-        setPage={setPage}
-        setSearchParams={setSearchParams}
-      />
+      <div className="flex flex-col text-center p-6 my-10">
+        <h1>FIND INTERESTING CONTENT</h1>
 
-      <div className="my-5 mx-96 text-center p-8">
-        {isLoading && <p>Loading...</p>}
+        <Search
+          setApiData={setApiData}
+          setApiResponsePages={setApiResponsePages}
+          setIsOrderedByRelevance={setIsOrderedByRelevance}
+          setPage={setPage}
+          setSearchParams={setSearchParams}
+          setQuery={setQuery}
+        />
 
         {apiData && <p>Foram encontrados: {apiData.size} artigos</p>}
 
         {posts && (
+          <OrderByRelevance
+            isOrderedByRelevance={isOrderedByRelevance}
+            setIsOrderedByRelevance={setIsOrderedByRelevance}
+            setApiData={setApiData}
+          />
+        )}
+
+        {isLoading && <LoadingSpinner />}
+
+        {posts && (
           <>
-            <OrderByRelevance
-              apiResponsePages={apiResponsePages}
-              isOrderedByRelevance={isOrderedByRelevance}
-              page={page}
-              searchParams={searchParams}
-              setApiData={setApiData}
-              setIsLoading={setIsLoading}
-              setIsOrderedByRelevance={setIsOrderedByRelevance}
-              setPosts={setPosts}
-              setPage={setPage}
-            />
-            <div className="text-start">
+            <div className="text-start m-auto md:w-1/3">
               {posts &&
                 posts.map((post) => {
                   return (
@@ -64,12 +84,11 @@ export const Home = () => {
             </div>
             <AppPagination
               apiResponsePages={apiResponsePages}
-              isOrderedByRelevance={isOrderedByRelevance}
               page={page}
               searchParams={searchParams}
               setApiData={setApiData}
-              setIsLoading={setIsLoading}
               setPage={setPage}
+              setSearchParams={setSearchParams}
             />
           </>
         )}

@@ -3,5 +3,28 @@
 @tailwind components;
 
 body {
-    -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;  
+  color: rgb(12 74 110);
+  background-color: #ECF9FF;
+  opacity: 0.8;
+  background-image: radial-gradient(#E5E0FF 0.5px, transparent 0.5px), radial-gradient(#E5E0FF 0.5px, #ECF9FF 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+h1 {
+  font-size: x-large;
+  font-weight: bolder;
+}
+
+h2 {
+  font-size: larger;
+  font-weight: 700;
+  margin-top: 20px;
+}
+
+a:hover {
+  color: #d4649a;
+  text-decoration: underline;
 }

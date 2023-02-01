@@ -1,50 +1,47 @@
 import { useState } from "react";
-import { searchPosts } from "../services/api";
 
 export const Search = ({
   setApiData,
   setApiResponsePages,
-  setIsLoading,
   setIsOrderedByRelevance,
   setPage,
   setSearchParams,
+  setQuery,
 }: any) => {
-  const [query, setQuery] = useState<string>("");
+  const [keyword, setKeyword] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
+    setKeyword(e.target.value);
   };
 
   const handleSearch = () => {
-    setSearchParams({ search: query });
-
-    if (!query?.trim()) {
+    if (!keyword?.trim()) {
       setSearchParams(undefined);
       return;
     }
 
-    try {
-      setIsLoading(true);
-      setApiData(null);
-      setIsOrderedByRelevance(false);
-      setPage(1);
-      setApiResponsePages(1);
-
-      searchPosts(query, 1).then((res) => {
-        setApiData(res);
-        setApiResponsePages(res.pages);
-        setIsLoading(false);
-      });
-      return;
-    } catch (error) {
-      console.log(error);
-    }
+    setSearchParams({ search: keyword });
+    setQuery(keyword);
+    setApiData(null);
+    setIsOrderedByRelevance(false);
+    setPage(1);
+    setApiResponsePages(1);
   };
 
   return (
-    <div className="text-center justify-center m-10 p-8">
-      <input placeholder="digite aqui..." onChange={handleChange} type="text" />
-      <button onClick={handleSearch}>GET</button>
+    <div className="flex flex-col gap-4 m-auto p-4 w-80">
+      <input
+        className="text-xl"
+        type="text"
+        placeholder="Spanish Keywords"
+        autoFocus
+        onChange={handleChange}
+      />
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+        onClick={handleSearch}>
+        Search
+      </button>
     </div>
   );
 };

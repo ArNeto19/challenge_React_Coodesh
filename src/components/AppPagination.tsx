@@ -1,45 +1,25 @@
-import { searchPosts } from "../services/api";
-
 export const AppPagination = ({
   apiResponsePages,
-  isOrderedByRelevance,
   page,
   searchParams,
   setApiData,
-  setIsLoading,
   setPage,
+  setSearchParams,
 }: any) => {
   const handleNextPage = () => {
     const newPage = page >= apiResponsePages ? 1 : page + 1;
-    updateResponseWithPagedRequest(newPage);
+    updateRequestPage(newPage);
   };
 
   const handlePreviousPage = () => {
     const newPage = page <= 1 ? apiResponsePages : page - 1;
-    updateResponseWithPagedRequest(newPage);
+    updateRequestPage(newPage);
   };
 
-  const updateResponseWithPagedRequest = (newPageNumber: number) => {
+  const updateRequestPage = (newPageNumber: number) => {
+    setApiData(null);
     setPage(newPageNumber);
-
-    try {
-      setIsLoading(true);
-
-      if (isOrderedByRelevance) {
-        searchPosts(`${searchParams.get("search")}`, newPageNumber, "relevance").then((res) => {
-          setApiData(res);
-          setIsLoading(false);
-        });
-        return;
-      }
-
-      searchPosts(`${searchParams.get("search")}`, newPageNumber).then((res) => {
-        setApiData(res);
-        setIsLoading(false);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    setSearchParams({ search: searchParams.get("search"), page: newPageNumber });
   };
 
   return (

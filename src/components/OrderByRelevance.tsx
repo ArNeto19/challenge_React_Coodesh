@@ -1,49 +1,17 @@
-import { searchPosts } from "../services/api";
-
 export const OrderByRelevance = ({
   isOrderedByRelevance,
-  page,
-  searchParams,
-  setApiData,
-  setIsLoading,
   setIsOrderedByRelevance,
-  setPosts,
+  setApiData,
 }: any) => {
-  const orderByRelevance = () => {
-    if (!isOrderedByRelevance) {
-      try {
-        setIsLoading(true);
-        setPosts(null);
-        setIsOrderedByRelevance(true);
-
-        searchPosts(`${searchParams.get("search")}`, page, "relevance").then((res) => {
-          setApiData(res);
-          setIsLoading(false);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setPosts(null);
-      setIsOrderedByRelevance(false);
-
-      searchPosts(`${searchParams.get("search")}`, page).then((res) => {
-        setApiData(res);
-        setIsLoading(false);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  const toggleOrderByRelevance = () => {
+    setApiData(null);
+    setIsOrderedByRelevance(!isOrderedByRelevance);
   };
 
   return (
-    <div className="flex justify-center space-x-2 my-3" onClick={orderByRelevance}>
+    <div className="flex justify-center space-x-2 my-3" onClick={toggleOrderByRelevance}>
       <button>Ordenar por relevância</button>
-      <input type="checkbox" checked={isOrderedByRelevance} />
+      <input type="checkbox" checked={isOrderedByRelevance} readOnly />
     </div>
   );
 };
