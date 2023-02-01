@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { ArticleContent } from "../components/ArticleContent";
-import { getArticle, IArticleData } from "../services/api";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { NavBar } from "../components/NavBar";
+import { getArticle, IArticleData } from "../services/api";
 
 export const Article = () => {
   const { postId } = useParams();

@@ -43,7 +43,7 @@ export interface IArticleData {
   ];
 }
 
-export const searchPosts = async (query: string, page?: number, orderType?: string) => {
+export const searchPosts = async (query: string | null, page?: number, orderType?: string) => {
   try {
     if (orderType !== undefined) {
       const response = await api.get(`/posts?search=${query}&page=${page}&orderby=${orderType}`);

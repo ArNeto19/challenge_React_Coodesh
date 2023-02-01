@@ -6,7 +6,6 @@ export const Search = ({
   setIsOrderedByRelevance,
   setPage,
   setSearchParams,
-  setQuery,
 }: any) => {
   const [keyword, setKeyword] = useState<string>("");
 
@@ -20,9 +19,8 @@ export const Search = ({
       return;
     }
 
-    setSearchParams({ search: keyword });
-    setQuery(keyword);
     setApiData(null);
+    setSearchParams({ search: keyword });
     setIsOrderedByRelevance(false);
     setPage(1);
     setApiResponsePages(1);
