@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ArticleContent } from "../components/ArticleContent";
+import { Breadcrumb } from "../components/Breadcrumb";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { NavBar } from "../components/NavBar";
 import { getArticle, IArticleData } from "../services/api";
@@ -21,20 +22,27 @@ export const Article = () => {
 
   return (
     <>
-    <NavBar showSearchIcon />
+      <NavBar showSearchIcon />
       {!articleData ? (
         <LoadingSpinner />
       ) : (
-        <ArticleContent
-          title={articleData.title}
-          headline={articleData.headline}
-          content={articleData.content}
-          author={articleData.author}
-          bibliography={articleData.bibliography}
-          published={articleData.published}
-          categories={articleData.categories}
-          tags={articleData.tags}
-        />
+        <>
+          <div className='m-2 md:mx-10' >
+            <Breadcrumb articleId={articleData.id} articleSlug={articleData.slug} />
+          </div>
+          <ArticleContent
+            id={articleData.id}
+            title={articleData.title}
+            headline={articleData.headline}
+            slug={articleData.slug}
+            content={articleData.content}
+            author={articleData.author}
+            bibliography={articleData.bibliography}
+            published={articleData.published}
+            categories={articleData.categories}
+            tags={articleData.tags}
+          />
+        </>
       )}
     </>
   );

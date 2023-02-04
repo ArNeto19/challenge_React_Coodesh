@@ -18,8 +18,10 @@ export interface IPostData {
 }
 
 export interface IArticleData {
+  id: number;
   title: string;
   headline: string;
+  slug: string
   content: string;
   author: {
     id: number;
@@ -32,7 +34,7 @@ export interface IArticleData {
   categories: [
     {
       id: number;
-      slug: string;
+      name: string;
     }
   ];
   tags: [
